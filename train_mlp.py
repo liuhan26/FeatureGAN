@@ -94,12 +94,12 @@ saver = tf.train.Saver();
 
 if args.train_step=="train":
     for epoch in range(300):
-        feature_gallery = load('/home/liuhan/github/FeatureGAN/mixture_exp/data/featuregallery.mat')
-        feature_probe = load('/home/liuhan/github/FeatureGAN/mixture_exp/data/featureprobe.mat')
+        feature_gallery = load('/home/liuhan/github/FeatureGAN/frgc_exp/data/featuregallery.mat')
+        feature_probe = load('/home/liuhan/github/FeatureGAN/frgc_exp/data/featureprobe.mat')
         color = feature_gallery['featuregallery']
         depth = feature_probe['featureprobe']
 
-        for it in range(156):
+        for it in range(117):
             Zm = color[it * 128:(it + 1) * 128]/50
             Xm = depth[it * 128:(it + 1) * 128]/50
             _, D_loss_curr = sess.run([D_solver, D_loss], feed_dict={X: Xm, Z: Zm})
@@ -116,6 +116,6 @@ if args.train_step=="train":
     saver.save(sess, "out/model.ckpt")
 else:
     saver.restore(sess, "out/model.ckpt")
-    Zm = load('/home/liuhan/github/FeatureGAN/lock3dface_exp/val/feature_color.mat')
+    Zm = load('/home/liuhan/github/FeatureGAN/frgc_exp/test/featuregallery.mat')
     samples = sess.run(G_sample, feed_dict={Z: Zm['featuregallery']/50})
-    sio.savemat('/home/liuhan/github/FeatureGAN/lock3dface_exp/val/feature_gallery.mat',{'featuregallery':samples})
+    sio.savemat('/home/liuhan/github/FeatureGAN/frgc_exp/test/feature_transform.mat',{'featuregallery':samples})
